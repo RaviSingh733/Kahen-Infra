@@ -18,7 +18,7 @@ const HERO_SLIDES = [
     subtitle: '& STATION INFRASTRUCTURE'
   },
   {
-    image: '/assets/images/steel_fab_hero_1780894235701.png',
+    image: '/assets/images/launchingblock.jpeg',
     title: 'OVERNIGHT BLOCK LAUNCHING',
     subtitle: '& STEEL GIRDER FABRICATION'
   },

@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { Award, Briefcase, Network, ShieldCheck, Users, HelpCircle, HardHat, FileSignature } from 'lucide-react';
+import { Award, Briefcase, Network, ShieldCheck, Users, HelpCircle, HardHat, FileSignature, Calendar, TrendingUp } from 'lucide-react';
 import { motion } from 'motion/react';
 
 // Live count-up helper with intersection observer support
@@ -48,8 +48,9 @@ const CountUp = ({ target, suffix = '', duration = 1500 }: { target: number; suf
 };
 
 const STATS = [
-  { icon: Award, target: 5, suffix: '+', label: 'Years of Experience' },
+  { icon: Calendar, target: 2022, suffix: '', label: 'Year Founded' },
   { icon: Briefcase, target: 30, suffix: '+', label: 'FOB Projects Completed' },
+  { icon: TrendingUp, target: 5, suffix: '+', label: 'Ongoing Projects' },
   { icon: Network, target: 35, suffix: '+', label: 'Stations Connected' },
   { icon: ShieldCheck, target: 100, suffix: '%', label: 'Safety Compliance' },
   { icon: Users, target: 200, suffix: '+', label: 'Skilled Professionals' },
@@ -167,9 +168,7 @@ export default function WhyChooseUs() {
               return (
                 <div 
                   key={idx} 
-                  className={`bg-slate-50/80 p-5 rounded-md border border-slate-100 flex flex-col justify-between items-center text-center shadow-sm hover:shadow-md transition-all ${
-                    idx === 4 ? 'col-span-2 md:col-span-1' : ''
-                  }`}
+                  className="bg-slate-50/80 p-5 rounded-md border border-slate-100 flex flex-col justify-between items-center text-center shadow-sm hover:shadow-md transition-all"
                 >
                   <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-[#f15a24] mb-4">
                     <Icon className="w-5 h-5 pointer-events-none" />

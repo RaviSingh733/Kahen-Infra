@@ -13,12 +13,14 @@ interface ContactModalProps {
 }
 
 // Replace this placeholder with your free Web3Forms Access Key from https://web3forms.com/
-const WEB3FORMS_ACCESS_KEY = "62688099-0e78-4395-81bd-beee6eef98de";
+const WEB3FORMS_ACCESS_KEY = "eff046d4-f426-4968-b225-d365e7997198";
 
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSending, setIsSending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submissionRef, setSubmissionRef] = useState('');
+  const [submissionTime, setSubmissionTime] = useState('');
 
   if (!isOpen) return null;
 
@@ -31,6 +33,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     setIsSending(true);
 
     try {
+      const refId = `KINFRA-CONN-${Math.floor(100 + Math.random() * 900)}`;
+      const timeStr = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " (IST)";
+
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
@@ -39,16 +44,21 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         },
         body: JSON.stringify({
           access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `[Website Lead] - ${form.subject || "General Inquiry"} (from ${form.name})`,
+          from_name: `Kahen Infra Portal - ${form.name}`,
+          Reference_ID: refId,
+          Submission_Time: timeStr,
           name: form.name,
           email: form.email,
-          subject: form.subject || "Kahen Infra Contact Inquiry",
-          message: form.message,
-          from_name: "Kahen Infra Portal Inquiry"
+          Inquiry_Subject: form.subject || "General Inquiry",
+          message: form.message
         })
       });
 
       const result = await response.json();
       if (result.success) {
+        setSubmissionRef(refId);
+        setSubmissionTime(timeStr);
         setIsSuccess(true);
       } else {
         alert(result.message || "Form submission failed. Please check your Web3Forms configurations.");
@@ -64,6 +74,8 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const handleReset = () => {
     setForm({ name: '', email: '', subject: '', message: '' });
     setIsSuccess(false);
+    setSubmissionRef('');
+    setSubmissionTime('');
   };
 
   return (
@@ -104,7 +116,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             <div className="text-left">
               <span className="text-[15px] font-black text-[#f15a24] tracking-widest uppercase">CONNECT NOW</span>
               <h3 className="font-display font-black text-xl md:text-xl tracking-tight uppercase leading-none mt-1">
-              Kahen Infra Contact Portal
+              Kahen Infra OPC Private Limited
               </h3>
             </div>
             <button
@@ -234,25 +246,80 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
               </div>
             ) : (
-              /* Success screen */
-              <div className="p-12 text-center space-y-4" id="contact-success-view">
-                <div className="w-14 h-14 bg-emerald-100 rounded-full text-emerald-600 flex items-center justify-center mx-auto mb-2">
+               /* Success screen */
+              <div className="p-6 md:p-8 text-center space-y-6 animate-fadeIn" id="contact-success-view">
+                <div className="w-14 h-14 bg-emerald-100 rounded-full text-emerald-600 flex items-center justify-center mx-auto mb-2 animate-bounce">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
+                
                 <div className="space-y-1">
-                  <h4 className="font-display font-black text-xl text-[#153e7a] uppercase">Message Transmitted!</h4>
-                  <p className="text-slate-400 font-sans text-xs">Reference: KINFRA-CONN-{Math.floor(100+Math.random()*900)}</p>
+                  <h4 className="font-display font-black text-xl text-[#153e7a] uppercase tracking-wide">
+                    Inquiry Lodged Successfully
+                  </h4>
+                  <p className="text-slate-400 font-mono text-xs">
+                    Reference ID: <span className="text-[#f15a24] bg-slate-100 px-2 py-0.5 rounded font-bold font-mono">{submissionRef}</span>
+                  </p>
                 </div>
-                <p className="text-slate-500 font-sans text-xs leading-relaxed max-w-sm mx-auto">
-                  Greetings, {form.name}. Your details have been transmitted safely to our Mumbai Headquarters communications manager. We will evaluate parameters and revert with answers closer to 24 hours.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="bg-slate-900 text-white font-display text-xs font-bold px-6 py-2 rounded shadow cursor-pointer hover:bg-slate-800 transition-colors"
-                >
-                  Send Another Inquiry
-                </button>
+
+                {/* Premium Submitted Data Sheet */}
+                <div className="max-w-md mx-auto bg-slate-50 border border-slate-200/60 rounded-xl overflow-hidden shadow-sm text-left">
+                  <div className="bg-[#153e7a] px-4 py-2.5 flex justify-between items-center text-white">
+                    <span className="text-[10px] font-black uppercase tracking-widest font-mono">Receipt of Transmission</span>
+                    <span className="flex items-center gap-1.5 text-[9px] bg-amber-500/20 text-amber-200 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping shrink-0" /> Pending Review
+                    </span>
+                  </div>
+                  
+                  <div className="p-5 space-y-3.5 text-xs font-sans text-slate-600">
+                    <div className="grid grid-cols-3 border-b border-slate-200/50 pb-2">
+                      <span className="font-bold text-slate-400 uppercase text-[9px] tracking-wider mt-0.5">Reference ID</span>
+                      <span className="col-span-2 font-mono font-bold text-[#f15a24]">{submissionRef}</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 border-b border-slate-200/50 pb-2">
+                      <span className="font-bold text-slate-400 uppercase text-[9px] tracking-wider mt-0.5">Submission Time</span>
+                      <span className="col-span-2 font-mono text-slate-800 font-semibold">{submissionTime}</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 border-b border-slate-200/50 pb-2">
+                      <span className="font-bold text-slate-400 uppercase text-[9px] tracking-wider mt-0.5">Sender Name</span>
+                      <span className="col-span-2 font-display font-black text-slate-800 text-sm leading-tight">{form.name}</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 border-b border-slate-200/50 pb-2">
+                      <span className="font-bold text-slate-400 uppercase text-[9px] tracking-wider mt-0.5">Email Address</span>
+                      <span className="col-span-2 font-mono text-slate-800 font-semibold break-all">{form.email}</span>
+                    </div>
+
+                    {form.subject && (
+                      <div className="grid grid-cols-3 border-b border-slate-200/50 pb-2">
+                        <span className="font-bold text-slate-400 uppercase text-[9px] tracking-wider mt-0.5">Subject Topic</span>
+                        <span className="col-span-2 text-slate-800 font-semibold">{form.subject}</span>
+                      </div>
+                    )}
+
+                    <div className="space-y-1.5 pt-1">
+                      <span className="font-bold text-slate-400 uppercase text-[9px] tracking-wider block">Submitted Message</span>
+                      <div className="p-3 bg-white border border-slate-100 rounded text-slate-700 leading-relaxed max-h-32 overflow-y-auto italic font-serif">
+                        "{form.message}"
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-slate-100/80 px-5 py-3 border-t border-slate-200/50 text-[10px] text-slate-400 leading-relaxed text-center font-sans">
+                    A copy of this inquiry has been routed to our Mumbai Headquarters. A representative will revert within 24 business hours.
+                  </div>
+                </div>
+
+                <div className="flex justify-center gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="bg-[#153e7a] hover:bg-[#0c2448] text-white font-display text-xs font-bold px-6 py-2.5 rounded shadow cursor-pointer transition-colors"
+                  >
+                    Send Another Inquiry
+                  </button>
+                </div>
               </div>
             )}
 

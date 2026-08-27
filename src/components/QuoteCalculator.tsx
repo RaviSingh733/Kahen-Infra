@@ -777,8 +777,19 @@ export default function QuoteCalculator({ isOpen, onClose }: QuoteCalculatorProp
     <div id="formal-print-sheet" className="hidden print:block p-8 bg-white text-slate-900 font-sans text-left">
           {/* Letterhead Header */}
           <div className="flex justify-between items-start border-b-2 border-[#153e7a] pb-6 mb-8">
-            <div className="flex items-center gap-3">
-              <img src="/assets/images/logo2.png" alt="Kahen Infra Logo" className="h-12 w-auto shrink-0" />
+            <div className="flex items-center gap-4">
+              <img src="/assets/images/logoquote.png" alt="Kahen Infra Logo" className="h-16 w-auto shrink-0" />
+              <div className="text-left font-sans text-xs text-slate-600 space-y-0.5">
+                <h4 className="font-display font-black text-base text-[#153e7a] leading-none uppercase">
+                  Kahen Infra (OPC) Private Limited
+                </h4>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  Dahnu, Mumbai, Maharashtra, India
+                </p>
+                <p className="text-[11px] text-slate-500 leading-tight">
+                  <span className="font-semibold text-slate-700">Phone:</span> +91 90962 13517 &nbsp;|&nbsp; <span className="font-semibold text-slate-700">Email:</span> md@kaheninfra.com
+                </p>
+              </div>
             </div>
             <div className="text-right text-xs text-slate-500 space-y-1">
               <p className="font-bold text-slate-800 text-sm">OFFICIAL ESTIMATION SHEET</p>

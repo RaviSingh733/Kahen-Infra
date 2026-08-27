@@ -42,7 +42,7 @@ export const SERVICES: Service[] = [
     id: 'steel-girder-fabrication',
     title: 'Steel Girder Fabrication & Erection',
     iconName: 'GirderIcon',
-    image: '/assets/images/steel_fab_hero_1780894235701.png',
+    image: '/assets/images/GadderMake.jpeg',
     shortDesc: 'In-house fabrication and precise erection of steel structures.',
     longDesc: 'Operating high-capacity fabrication yards equipped with CNC drilling, automated submerged arc welding (SAW), and shot blasting machines. We engineer Warren, Pratt, and Bowstring girders, shipping them as bolt-together modular sections built for rapid overnight erection during brief railway track blocks.',
     features: [

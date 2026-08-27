@@ -70,8 +70,7 @@ export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
               </div>
               <div className="relative rounded overflow-hidden h-48 md:h-64 bg-slate-100">
                 <img
-                  src="/assets/images/steel_fab_hero_1780894235701.png"
-                  alt="Bridge fabrication steel yard"
+                  src="/assets/images/Aboutimage.jpeg"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />

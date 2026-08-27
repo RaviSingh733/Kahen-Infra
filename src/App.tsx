@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import Projects from './components/Projects';
+import Clients from './components/Clients';
 import IndiaMapVisualization from './components/IndiaMapVisualization';
 import WhyChooseUs from './components/WhyChooseUs';
 import QuoteCalculator from './components/QuoteCalculator';
@@ -84,6 +85,9 @@ export default function App() {
 
           {/* 3. Recent Project Cases showcase */}
           <Projects onOpenContact={() => setIsContactOpen(true)} />
+
+          {/* Our Trusted Clients */}
+          <Clients />
 
           {/* 4. India Railway Network Coverage map */}
           <IndiaMapVisualization />
