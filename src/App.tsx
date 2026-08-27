@@ -22,23 +22,8 @@ import PremiumLoader from './components/PremiumLoader';
 
 
 export default function App() {
-  // Loading preloader state (only shows once per browser session)
-  const [isLoading, setIsLoading] = useState(() => {
-    try {
-      return !sessionStorage.getItem('kahen-preloader-shown');
-    } catch {
-      return true;
-    }
-  });
-
-  const handleLoaderComplete = () => {
-    setIsLoading(false);
-    try {
-      sessionStorage.setItem('kahen-preloader-shown', 'true');
-    } catch (e) {
-      console.warn('Failed to set preloader session storage:', e);
-    }
-  };
+  // Loading preloader state
+  const [isLoading, setIsLoading] = useState(true);
 
   // Modal states
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
@@ -86,7 +71,7 @@ export default function App() {
     <>
       <AnimatePresence mode="wait">
         {isLoading && (
-          <PremiumLoader onComplete={handleLoaderComplete} />
+          <PremiumLoader onComplete={() => setIsLoading(false)} />
         )}
       </AnimatePresence>
 

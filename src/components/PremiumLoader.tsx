@@ -4,17 +4,17 @@
  */
 
 import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 
 interface PremiumLoaderProps {
   onComplete: () => void;
 }
 
 export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
-  const [progress, setProgress] = useState(0);
-  const shouldReduceMotion = useReducedMotion();
+  const [isWindowLoaded, setIsWindowLoaded] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
 
-  // Prevent background scrolling while the preloader is active
+  // Disable body scroll while loader is active to prevent scroll artifacting
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -23,88 +23,124 @@ export default function PremiumLoader({ onComplete }: PremiumLoaderProps) {
     };
   }, []);
 
-  // Precise frame-by-frame loading progress animation (1.0 second duration)
+  // Listen to window load event
   useEffect(() => {
-    let animFrameId: number;
-    const duration = 1000; // 1 second progress load
-    const startTime = performance.now();
+    if (document.readyState === 'complete') {
+      setIsWindowLoaded(true);
+    } else {
+      const handleLoad = () => setIsWindowLoaded(true);
+      window.addEventListener('load', handleLoad);
+      return () => window.removeEventListener('load', handleLoad);
+    }
+  }, []);
 
-    const animate = (time: number) => {
-      const elapsed = time - startTime;
-      const currentProgress = Math.min(100, (elapsed / duration) * 100);
-      setProgress(currentProgress);
+  // Guarantee minimum visible time (e.g. 1.0 second) for the brand animation to execute beautifully
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMinTimeElapsed(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
-      if (currentProgress < 100) {
-        animFrameId = requestAnimationFrame(animate);
-      } else {
-        // Subtle hold of 150ms at 100% before triggering completion
-        const timeout = setTimeout(() => {
-          onComplete();
-        }, 150);
-        return () => clearTimeout(timeout);
+  // Complete loading when both window resources are loaded and minimum duration has elapsed
+  useEffect(() => {
+    if (isWindowLoaded && minTimeElapsed) {
+      onComplete();
+    }
+  }, [isWindowLoaded, minTimeElapsed, onComplete]);
+
+  // Animation variants for staggered typography
+  const titleContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.04,
+        delayChildren: 0.1
       }
-    };
+    }
+  } as const;
 
-    animFrameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animFrameId);
-  }, [onComplete]);
+  const letterVariant = {
+    hidden: { opacity: 0, y: 12 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { type: "spring", damping: 15, stiffness: 180 }
+    }
+  } as const;
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white text-slate-800 overflow-hidden"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#020712] text-white overflow-hidden"
       initial={{ opacity: 1 }}
       exit={{ 
-        opacity: 0,
-        y: shouldReduceMotion ? 0 : -20,
-        transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } // Smooth easeOutExpo
+        opacity: 0, 
+        y: -40,
+        transition: { duration: 0.4, ease: [0.76, 0, 0.24, 1] } 
       }}
     >
-      {/* Brand Centerpiece */}
+      {/* Ambient background pulsing glow blobs (Luxury theme) */}
+      <div className="absolute top-1/4 left-1/4 w-[450px] h-[450px] bg-[#153e7a]/15 rounded-full filter blur-[120px] animate-pulse pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#f15a24]/8 rounded-full filter blur-[120px] animate-pulse pointer-events-none" style={{ animationDelay: '2s' }} />
+
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:45px_45px] pointer-events-none opacity-40" />
+
+      {/* Technical Corner layout markings */}
+      <div className="absolute top-8 left-8 border-t border-l border-white/10 w-5 h-5 pointer-events-none" />
+      <div className="absolute top-8 right-8 border-t border-r border-white/10 w-5 h-5 pointer-events-none" />
+      <div className="absolute bottom-8 left-8 border-b border-l border-white/10 w-5 h-5 pointer-events-none" />
+      <div className="absolute bottom-8 right-8 border-b border-r border-white/10 w-5 h-5 pointer-events-none" />
+
+      {/* Central Glassmorphism Card */}
       <motion.div
-        className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-8 text-center sm:text-left select-none px-4"
-        initial={{ 
-          opacity: 0, 
-          y: shouldReduceMotion ? 0 : 15,
-          scale: shouldReduceMotion ? 1 : 0.97
-        }}
-        animate={{ 
-          opacity: 1, 
-          y: 0,
-          scale: 1 
-        }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-[#05142b]/40 backdrop-blur-xl border border-white/10 rounded-2xl p-10 flex flex-col items-center shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)] z-10 max-w-sm w-[90vw]"
+        initial={{ opacity: 0, y: 25, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        {/* Company Logo Image Symbol */}
-        <div className="w-[90px] h-[55px] sm:w-[110px] sm:h-[65px] flex items-center justify-center">
+        {/* Company Logo in natural aspect ratio (un-cropped) */}
+        <div className="h-16 w-full flex items-center justify-center mb-8 relative">
           <img
-            src="/assets/images/logoquote.png"
+            src="/assets/images/newlogo1.png"
             alt="Kahen Infra Logo"
-            className="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.02)]"
+            className="h-full max-w-[80%] object-contain relative z-10 filter drop-shadow-[0_0_12px_rgba(255,255,255,0.2)] select-none"
             draggable={false}
           />
         </div>
 
-        {/* Corporate Divider Line (Hidden on mobile stack) */}
-        <div className="hidden sm:block w-[1.5px] h-12 bg-slate-200" />
-
-        {/* Corporate Brand Typography */}
-        <div className="flex flex-col">
-          <span className="font-display text-[26px] sm:text-[32px] font-black tracking-tight leading-none text-[#153e7a] flex items-center justify-center sm:justify-start">
-            KAHEN <span className="text-[#f15a24] ml-1.5 font-black">INFRA</span>
-          </span>
-          <span className="text-[11px] sm:text-[12px] tracking-[0.25em] font-medium text-slate-500 uppercase leading-none mt-1.5">
+        {/* Brand Name Typography */}
+        <div className="text-center select-none w-full">
+          <motion.h1 
+            className="font-display text-2xl md:text-3xl font-black tracking-widest text-white leading-none flex justify-center gap-[1px]"
+            variants={titleContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            {"KAHEN".split("").map((char, i) => (
+              <motion.span key={`k-${i}`} variants={letterVariant} className="drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                {char}
+              </motion.span>
+            ))}
+            <span className="w-2.5" />
+            {"INFRA".split("").map((char, i) => (
+              <motion.span key={`i-${i}`} variants={letterVariant} className="text-[#f15a24] drop-shadow-[0_0_12px_rgba(241,90,36,0.4)]">
+                {char}
+              </motion.span>
+            ))}
+          </motion.h1>
+          
+          <motion.p 
+            className="text-[9px] md:text-[10px] font-bold tracking-[0.3em] text-slate-400 uppercase mt-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+          >
             (OPC) Private Limited
-          </span>
+          </motion.p>
         </div>
       </motion.div>
-
-      {/* Minimal Elegant Progress Line */}
-      <div className="w-56 max-w-[70vw] h-[2px] bg-slate-100 rounded-full overflow-hidden relative">
-        <motion.div
-          className="h-full bg-gradient-to-r from-[#153e7a] to-[#f15a24] rounded-full"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
     </motion.div>
   );
 }
