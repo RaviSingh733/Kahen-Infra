@@ -463,7 +463,7 @@ export default function IndiaMapVisualization() {
                 <span className="w-2.5 h-2.5 rounded-full bg-[#f15a24]" /> Active Completed Pins
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-700" stroke="#f15a24" /> Custom Selected Hub
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-700 border border-[#f15a24]" /> Custom Selected Hub
               </span>
               <span className="flex items-center gap-1.5 font-mono text-[9px]">
                 *Tip: Click pins to load site report

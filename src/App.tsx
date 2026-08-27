@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'motion/react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -17,8 +18,28 @@ import SafetyModal from './components/SafetyModal';
 import CareersModal from './components/CareersModal';
 import ContactModal from './components/ContactModal';
 import Footer from './components/Footer';
+import PremiumLoader from './components/PremiumLoader';
+
 
 export default function App() {
+  // Loading preloader state (only shows once per browser session)
+  const [isLoading, setIsLoading] = useState(() => {
+    try {
+      return !sessionStorage.getItem('kahen-preloader-shown');
+    } catch {
+      return true;
+    }
+  });
+
+  const handleLoaderComplete = () => {
+    setIsLoading(false);
+    try {
+      sessionStorage.setItem('kahen-preloader-shown', 'true');
+    } catch (e) {
+      console.warn('Failed to set preloader session storage:', e);
+    }
+  };
+
   // Modal states
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
@@ -63,6 +84,12 @@ export default function App() {
 
   return (
     <>
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <PremiumLoader onComplete={handleLoaderComplete} />
+        )}
+      </AnimatePresence>
+
       <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-[#f15a24] selection:text-white" id="main-layout">
         
         {/* Header Navigation Menu bar */}
@@ -78,10 +105,10 @@ export default function App() {
         <main className="flex-grow">
           
           {/* 1. Hero Cover */}
-          <Hero onOpenQuote={() => setIsQuoteOpen(true)} onOpenContact={() => setIsContactOpen(true)} />
+          <Hero onOpenQuote={() => setIsQuoteOpen(true)} />
 
           {/* 2. Operations and Core Services */}
-          <Services onOpenQuote={() => setIsQuoteOpen(true)} />
+          <Services onOpenContact={() => setIsContactOpen(true)} />
 
           {/* 3. Recent Project Cases showcase */}
           <Projects onOpenContact={() => setIsContactOpen(true)} />
