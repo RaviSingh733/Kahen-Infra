@@ -103,7 +103,7 @@ export default function Header({
           <div className="cursor-pointer flex items-center gap-2.5" onClick={() => scrollToSection('home')} id="logo-header">
             <svg viewBox="0 0 120 70" className="w-[70px] h-[40px]">
   <image
-    href="public/assets/images/logo2.png"
+    href="/assets/images/logo2.png"
     width="110"
     height="70"
     preserveAspectRatio="xMidYMid meet"

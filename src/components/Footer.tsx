@@ -67,7 +67,7 @@ export default function Footer({
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => handleScrollToTop('home')}>
             <svg viewBox="0 0 120 70" className="w-[120px] h-[75px]">
               <image
-                href="public/assets/images/newlogo1.png"
+                href="/assets/images/newlogo1.png"
                 width="120"
                 height="90"
                 preserveAspectRatio="xMidYMid meet"

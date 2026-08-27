@@ -778,7 +778,7 @@ export default function QuoteCalculator({ isOpen, onClose }: QuoteCalculatorProp
           {/* Letterhead Header */}
           <div className="flex justify-between items-start border-b-2 border-[#153e7a] pb-6 mb-8">
             <div className="flex items-center gap-3">
-              <img src="public/assets/images/logo2.png" alt="Kahen Infra Logo" className="h-12 w-auto shrink-0" />
+              <img src="/assets/images/logo2.png" alt="Kahen Infra Logo" className="h-12 w-auto shrink-0" />
             </div>
             <div className="text-right text-xs text-slate-500 space-y-1">
               <p className="font-bold text-slate-800 text-sm">OFFICIAL ESTIMATION SHEET</p>
