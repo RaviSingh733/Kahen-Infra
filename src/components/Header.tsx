@@ -77,7 +77,7 @@ export default function Header({
               md@kaheninfra.com
             </a>
             <span className="h-3 w-[1px] bg-slate-700 hidden sm:inline" />
-            <a href="tel:+99351879414" className="flex items-center gap-1.5 hover:text-white transition-colors">
+            <a href="tel:+919036213517" className="flex items-center gap-1.5 hover:text-white transition-colors">
               <Phone className="w-3.5 h-3.5 text-[#f15a24]" />
               +91 9036213517
             </a>

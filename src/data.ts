@@ -90,7 +90,7 @@ export const SERVICES: Service[] = [
     id: 'maintenance-rehabilitation',
     title: 'Maintenance & Rehabilitation',
     iconName: 'MaintenanceIcon',
-    image: '/assets/images/bridge_rehab_maintenance_1780894491743.png',
+    image: '/assets/images/new image virar.jpeg',
     shortDesc: 'Inspection, maintenance and strengthening of existing structures.',
     longDesc: 'Extending the life cycles of vintage British-era and early independent-era railway FOBs. We offer full structural auditing, rust removal, section-strengthening via carbon fiber wrapping or additional steel plates, rivet replacement with high-strength friction grip (HSFG) bolts, and dynamic load testing.',
     features: [
